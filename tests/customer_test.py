@@ -1,7 +1,11 @@
-import unittest
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from customer import Customer
 from coffee import Coffee
 from order import Order
+
 
 class TestCustomer(unittest.TestCase):
     def setUp(self):
