@@ -22,3 +22,17 @@ class TestCustomer(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             Customer("x" * 16)
+
+    def test_customer_orders_and_coffees(self):
+        customer = Customer("Bob")
+        coffee1 = Coffee("Latte")
+        coffee2 = Coffee("Espresso")
+        customer.create_order(coffee1, 5.0)
+        customer.create_order(coffee2, 7.0)
+        customer.create_order(coffee1, 4.5)
+
+        orders = customer.orders()
+        coffees = customer.coffees()
+
+        self.assertEqual(len(orders), 3)
+        self.assertEqual(set(coffees), {coffee1, coffee2})
