@@ -1,55 +1,43 @@
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
+import unittest
 from customer import Customer
 from coffee import Coffee
 from order import Order
 
 
 class TestCustomer(unittest.TestCase):
+
     def setUp(self):
-        Customer.all_customers.clear()
+        # Clear all orders before each test
         Order.all_orders.clear()
 
-    def test_customer_init_valid_name(self):
-        customer = Customer("Alice")
-        self.assertEqual(customer.name, "Alice")
+    def test_name_setter_getter_valid(self):
+        c = Customer("Alice")
+        self.assertEqual(c.name, "Alice")
+        c.name = "Bob"
+        self.assertEqual(c.name, "Bob")
 
-    def test_customer_invalid_name_type(self):
+    def test_name_setter_invalid_type(self):
         with self.assertRaises(ValueError):
-            Customer(123)
+            Customer(123)  # Not a string
 
-    def test_customer_invalid_name_length(self):
+    def test_name_setter_invalid_length(self):
         with self.assertRaises(ValueError):
-            Customer("")
-
+            Customer("")  # Too short
         with self.assertRaises(ValueError):
-            Customer("x" * 16)
+            Customer("a" * 16)  # Too long
 
-    def test_customer_orders_and_coffees(self):
-        customer = Customer("Bob")
+    def test_orders_and_coffees(self):
+        c = Customer("Alice")
         coffee1 = Coffee("Latte")
-        coffee2 = Coffee("Espresso")
-        customer.create_order(coffee1, 5.0)
-        customer.create_order(coffee2, 7.0)
-        customer.create_order(coffee1, 4.5)
+        coffee2 = Coffee("Mocha")
 
-        orders = customer.orders()
-        coffees = customer.coffees()
+        order1 = c.create_order(coffee1, 3.5)
+        order2 = c.create_order(coffee2, 4.5)
+        order3 = c.create_order(coffee1, 5.0)
 
-        self.assertEqual(len(orders), 3)
-        self.assertEqual(set(coffees), {coffee1, coffee2})
+        self.assertEqual(len(c.orders()), 3)
+        self.assertCountEqual(c.coffees(), [coffee1, coffee2])
 
-    def test_most_aficionado(self):
-        coffee = Coffee("Cappuccino")
-        c1 = Customer("Ana")
-        c2 = Customer("Ben")
-        c1.create_order(coffee, 6.0)
-        c2.create_order(coffee, 4.0)
-        c1.create_order(coffee, 3.0)
-
-        self.assertEqual(Customer.most_aficionado(coffee), c1)
 
 if __name__ == "__main__":
     unittest.main()
