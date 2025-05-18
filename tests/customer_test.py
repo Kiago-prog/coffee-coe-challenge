@@ -36,3 +36,16 @@ class TestCustomer(unittest.TestCase):
 
         self.assertEqual(len(orders), 3)
         self.assertEqual(set(coffees), {coffee1, coffee2})
+
+    def test_most_aficionado(self):
+        coffee = Coffee("Cappuccino")
+        c1 = Customer("Ana")
+        c2 = Customer("Ben")
+        c1.create_order(coffee, 6.0)
+        c2.create_order(coffee, 4.0)
+        c1.create_order(coffee, 3.0)
+
+        self.assertEqual(Customer.most_aficionado(coffee), c1)
+
+if __name__ == "__main__":
+    unittest.main()
