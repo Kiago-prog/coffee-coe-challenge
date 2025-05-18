@@ -26,3 +26,13 @@ class TestOrder(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             Order(c, cf, "5")
+
+    def test_order_invalid_types(self):
+        with self.assertRaises(TypeError):
+            Order("not a customer", Coffee("Latte"), 5.0)
+
+        with self.assertRaises(TypeError):
+            Order(Customer("Liam"), "not coffee", 5.0)
+
+if __name__ == "__main__":
+    unittest.main()
